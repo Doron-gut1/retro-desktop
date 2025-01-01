@@ -1,67 +1,37 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
-import * as odbc from 'odbc';
-
-let mainWindow: BrowserWindow | null = null;
-
-// ODBC Connection Configuration
-const odbcConfig = {
-  connectionString: 'DSN=YourDSNName;',
-  connectionTimeout: 10,
-  loginTimeout: 10
-};
+import * as isDev from 'electron-is-dev';
 
 function createWindow() {
-  mainWindow = new BrowserWindow({
+  // Create the browser window.
+  const mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: true,
-      preload: path.join(__dirname, 'preload.ts')
-    },
+      contextIsolation: false
+    }
   });
 
-  // In development, load from React dev server
-  if (process.env.NODE_ENV === 'development') {
-    mainWindow.loadURL('http://localhost:5173');
+  // Load the index.html from a url in development
+  // or the local file in production.
+  const startURL = isDev 
+    ? 'http://localhost:5173' 
+    : `file://${path.join(__dirname, '../build/index.html')}`;
+
+  mainWindow.loadURL(startURL);
+
+  // Open the DevTools in development.
+  if (isDev) {
     mainWindow.webContents.openDevTools();
-  } else {
-    // In production, load the built files
-    mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
-  }
-
-  mainWindow.on('closed', () => {
-    mainWindow = null;
-  });
-}
-
-// Database Connection Handler
-async function connectToDatabase() {
-  try {
-    const connection = await odbc.connect(odbcConfig.connectionString);
-    return connection;
-  } catch (error) {
-    console.error('Database connection error:', error);
-    throw error;
   }
 }
 
-// IPC Handlers
-ipcMain.handle('db:query', async (event, query, params) => {
-  try {
-    const connection = await connectToDatabase();
-    const result = await connection.query(query, params);
-    await connection.close();
-    return result;
-  } catch (error) {
-    console.error('Query error:', error);
-    throw error;
-  }
-});
-
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
 app.whenReady().then(createWindow);
 
+// Quit when all windows are closed.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
@@ -69,7 +39,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-  if (mainWindow === null) {
+  if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
 });
