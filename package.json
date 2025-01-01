@@ -2,13 +2,16 @@
   "name": "retro-desktop",
   "version": "1.0.0",
   "description": "Desktop application for retroactive calculations",
-  "main": "electron/main.js",
+  "main": "dist/electron/main.js",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "build:electron": "tsc electron/main.ts",
-    "start:electron": "electron .",
-    "start:all": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && npm run start:electron\""
+    "build:electron": "tsc -p electron/tsconfig.json",
+    "preview": "vite preview",
+    "start": "electron dist/electron/main.js",
+    "dev:electron": "concurrently \"npm run dev\" \"npm run build:electron -- --watch\" \"wait-on http://localhost:5173 && electron .\"",
+    "build:all": "npm run build && npm run build:electron",
+    "start:prod": "electron ."
   },
   "repository": {
     "type": "git",
@@ -31,7 +34,7 @@
     "@types/electron": "^1.6.10",
     "@types/mssql": "^9.1.4",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0", 
     "@vitejs/plugin-react": "^4.0.0",
     "autoprefixer": "^10.0.0",
     "concurrently": "^8.0.0",
