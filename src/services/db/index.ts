@@ -1,2 +1,2 @@
-export * from './databaseService';
+export * from './DatabaseService';
 export * from './types';

@@ -9,9 +9,12 @@ export interface DatabaseConfig {
   };
 }
 
-export interface QueryResult<T = any> {
-  recordset: T[];
-  recordsets: T[][];
+export interface QueryResult {
+  recordset: any[];
   rowsAffected: number[];
-  output: { [key: string]: any };
+  output: any;
+}
+
+export interface StoredProcParams {
+  [key: string]: string | number | boolean | Date;
 }
