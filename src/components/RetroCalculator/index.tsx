@@ -1,6 +1,5 @@
-// Using code from Retro Interface Mockup.tsx
 import React, { useState } from 'react';
-import { Search, Calendar, FileText, Calculator, Check } from 'lucide-react';
+import { Search, Calendar, FileText, Calculator, Check, X } from 'lucide-react';
 
 export const RetroCalculator: React.FC = () => {
   const [showResults, setShowResults] = useState(false);
@@ -11,156 +10,118 @@ export const RetroCalculator: React.FC = () => {
   ]);
 
   return (
-    <div dir="rtl" className="flex flex-col bg-gray-50 min-h-screen text-right">
-      <div className="bg-blue-600 text-white p-4">
-        <h1 className="text-2xl font-semibold">חישוב רטרו</h1>
-      </div>
-      
-      <div className="flex flex-col p-4 gap-4">
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="grid grid-cols-3 gap-6">
-            {/* Right Column - Property & Payer Info */}
-            <div className="space-y-4">
-              {/* Property Search */}
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">קוד נכס</label>
-                <div className="flex gap-2">
+    <div dir="rtl" className="flex flex-col bg-white min-h-screen">
+      <div className="p-4">
+        <h1 className="text-2xl mb-4 text-center">חישוב רטרו</h1>
+
+        <div className="space-y-6">
+          {/* Main Form Section */}
+          <div>
+            <div className="grid grid-cols-[2fr,1fr] gap-4">
+              {/* Right Column - Search & Filters */}
+              <div className="space-y-4">
+                {/* Property Search */}
+                <div className="flex gap-2 justify-end">
                   <input 
                     type="text" 
-                    className="flex-1 p-2 border rounded focus:ring-2 focus:ring-blue-500"
+                    className="border p-1 w-64 text-right"
                     placeholder="הזן קוד נכס..."
                   />
-                  <button className="p-2 bg-blue-100 text-blue-600 rounded hover:bg-blue-200">
-                    <Search size={20} />
-                  </button>
+                  <button className="p-1 px-4 border hover:bg-gray-50">חפש</button>
                 </div>
-              </div>
 
-              {/* Payer Information */}
-              <div className="p-4 border rounded bg-blue-50">
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <h4 className="font-medium">פרטי משלם</h4>
-                    <button className="text-blue-600 hover:text-blue-800 text-sm">
-                      החלף משלם
-                    </button>
-                  </div>
-                  <div className="space-y-2">
-                    <div>
-                      <label className="block text-sm text-gray-600">מספר משלם</label>
-                      <input type="text" className="w-full p-1 border rounded" value="12345" />
-                    </div>
-                    <div>
-                      <label className="block text-sm text-gray-600">שם משלם</label>
-                      <input type="text" className="w-full p-1 border rounded" value="ישראל ישראלי" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Middle Column - Dates & Charge Types */}
-            <div className="space-y-4">
-              <div className="space-y-4">
+                {/* Date Range */}
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium">תאריך התחלה</label>
-                  <div className="flex gap-2">
-                    <input type="date" className="flex-1 p-2 border rounded" />
-                    <button className="p-2 bg-blue-100 text-blue-600 rounded hover:bg-blue-200">
-                      <Calendar size={20} />
-                    </button>
+                  <div className="flex items-center gap-2 justify-end">
+                    <input 
+                      type="text" 
+                      className="border p-1 w-32 text-right"
+                      placeholder="dd/mm/yyyy"
+                    />
+                    <label className="text-sm">תאריך התחלה</label>
+                  </div>
+                  <div className="flex items-center gap-2 justify-end">
+                    <input 
+                      type="text" 
+                      className="border p-1 w-32 text-right"
+                      placeholder="dd/mm/yyyy"
+                    />
+                    <label className="text-sm">תאריך סיום</label>
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium">תאריך סיום</label>
-                  <div className="flex gap-2">
-                    <input type="date" className="flex-1 p-2 border rounded" />
-                    <button className="p-2 bg-blue-100 text-blue-600 rounded hover:bg-blue-200">
-                      <Calendar size={20} />
-                    </button>
-                  </div>
+
+                {/* Charge Types */}
+                <div className="flex items-center gap-4 justify-end">
+                  <label className="flex items-center gap-1">
+                    <input type="checkbox" />
+                    <span>שמירה</span>
+                  </label>
+                  <label className="flex items-center gap-1">
+                    <input type="checkbox" />
+                    <span>ביוב</span>
+                  </label>
+                  <label className="flex items-center gap-1">
+                    <input type="checkbox" />
+                    <span>מים</span>
+                  </label>
+                  <label className="flex items-center gap-1">
+                    <input type="checkbox" />
+                    <span>ארנונה</span>
+                  </label>
+                  <span>סוגי חיוב:</span>
                 </div>
               </div>
 
-              {/* Charge Types */}
+              {/* Left Column - Action Buttons */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium">סוגי חיוב</label>
-                <div className="border rounded p-2 space-y-2">
-                  {['ארנונה', 'מים', 'ביוב', 'שמירה'].map((type) => (
-                    <label key={type} className="flex items-center gap-2">
-                      <input type="checkbox" className="form-checkbox" />
-                      <span>{type}</span>
-                    </label>
-                  ))}
-                </div>
+                <button className="w-full p-2 bg-blue-600 text-white rounded hover:bg-blue-700">חשב</button>
+                <button className="w-full p-2 bg-green-600 text-white rounded hover:bg-green-700">אשר</button>
               </div>
             </div>
 
-            {/* Action Buttons Column */}
-            <div className="flex flex-col justify-end gap-2">
-              <button 
-                className="bg-blue-600 text-white p-3 rounded flex items-center justify-center gap-2 hover:bg-blue-700"
-                onClick={() => setShowResults(true)}
-              >
-                <Calculator size={20} />
-                חשב
-              </button>
-              <button className="bg-green-600 text-white p-3 rounded flex items-center justify-center gap-2 hover:bg-green-700">
-                <Check size={20} />
-                אשר
-              </button>
-            </div>
-          </div>
+            {/* Sizes & Tariffs Table */}
+            <div className="mt-8">
+              <div className="flex justify-between items-center mb-2">
+                <button className="text-sm text-blue-600 hover:underline">עריכה מרוכזת</button>
+                <h2 className="text-lg font-medium">גדלים ותעריפים</h2>
+              </div>
 
-          {/* Sizes and Tariffs Table */}
-          <div className="mt-6 space-y-4">
-            <div className="flex justify-between items-center">
-              <h3 className="font-medium">גדלים ותעריפים</h3>
-              <button className="text-sm text-blue-600 hover:text-blue-800">
-                עריכה מרוכזת
-              </button>
-            </div>
-            
-            <div className="border rounded">
               <table className="w-full text-sm">
-                <thead className="bg-gray-50 text-gray-600">
+                <thead className="border-b">
                   <tr>
-                    <th className="p-2 text-right border-b">מס׳</th>
-                    <th className="p-2 text-right border-b">גודל</th>
-                    <th className="p-2 text-right border-b">קוד תעריף</th>
-                    <th className="p-2 text-right border-b">שם תעריף</th>
-                    <th className="p-2 text-right border-b">תעריף</th>
-                    <th className="p-2 text-right border-b">פעולות</th>
+                    <th className="p-2 text-right">מס׳</th>
+                    <th className="p-2 text-right">גודל</th>
+                    <th className="p-2 text-right">קוד תעריף</th>
+                    <th className="p-2 text-right">שם תעריף</th>
+                    <th className="p-2 text-right">תעריף</th>
+                    <th className="p-2 text-right">פעולות</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y">
-                  {sizes.filter(row => row.size > 0).map((row) => (
-                    <tr key={row.id} className="hover:bg-gray-50">
+                <tbody>
+                  {sizes.map((row) => (
+                    <tr key={row.id} className="border-b hover:bg-gray-50">
                       <td className="p-2">{row.id}</td>
                       <td className="p-2">
                         <input 
-                          type="number" 
-                          className="w-20 p-1 border rounded" 
+                          type="text" 
+                          className="border p-1 w-16 text-right" 
                           value={row.size}
                         />
                       </td>
                       <td className="p-2">
-                        <div className="flex gap-2">
+                        <div className="flex items-center gap-2">
                           <input 
                             type="text" 
-                            className="w-20 p-1 border rounded" 
+                            className="border p-1 w-20 text-right" 
                             value={row.tariffCode}
-                            readOnly
                           />
-                          <button className="text-xs bg-gray-100 px-2 py-1 rounded hover:bg-gray-200">
-                            בחר
-                          </button>
+                          <button className="border px-2 py-1 text-sm hover:bg-gray-50">בחר</button>
                         </div>
                       </td>
                       <td className="p-2">
                         <input 
                           type="text" 
-                          className="w-full p-1 border rounded bg-gray-50" 
+                          className="border p-1 w-full bg-gray-50" 
                           value={row.tariffName}
                           readOnly
                         />
@@ -168,34 +129,26 @@ export const RetroCalculator: React.FC = () => {
                       <td className="p-2">
                         <input 
                           type="text" 
-                          className="w-24 p-1 border rounded bg-gray-50" 
+                          className="border p-1 w-20 text-right bg-gray-50" 
                           value={`₪${row.tariffAmount}`}
                           readOnly
                         />
                       </td>
                       <td className="p-2">
-                        <button className="text-red-600 hover:text-red-800">
-                          מחק
-                        </button>
+                        <button className="text-red-600 hover:text-red-800">מחק</button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
-                <tfoot className="bg-gray-50">
-                  <tr>
-                    <td colSpan={6} className="p-2">
-                      <button className="text-sm text-blue-600 hover:text-blue-800">
-                        + הוסף גודל חדש
-                      </button>
-                    </td>
-                  </tr>
-                </tfoot>
               </table>
-            </div>
 
-            <div className="text-sm bg-gray-50 p-2 rounded flex justify-between">
-              <span>סה"כ שטח:</span>
-              <span className="font-medium">115 מ"ר</span>
+              <div className="flex justify-between items-center mt-4">
+                <button className="text-blue-600 hover:underline">+ הוסף גודל חדש</button>
+                <div className="text-sm">
+                  <span>סה"כ שטח:</span>
+                  <span className="font-medium mr-1">115 מ"ר</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
