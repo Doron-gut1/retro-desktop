@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Search } from 'lucide-react';
-import { DatabaseService } from '../../services/database';
+import { DatabaseService } from '../../services/db';
 import type { Property } from '../../types/property';
 
 interface PropertySearchProps {
-  value: string;
-  onChange: (value: string) => void;
+  onSelect: (propertyId: string) => void;
 }
 
-export const PropertySearch: React.FC<PropertySearchProps> = ({ value, onChange }) => {
+export const PropertySearch: React.FC<PropertySearchProps> = ({ onSelect }) => {
+  const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>();
 
@@ -19,29 +19,8 @@ export const PropertySearch: React.FC<PropertySearchProps> = ({ value, onChange 
     setError(undefined);
 
     try {
-      const result = await DatabaseService.getProperty(value);
-      
-      if (!result.success) {
-        setError(result.error || 'שגיאה בחיפוש נכס');
-        return;
-      }
-
-      const property = result.data as Property;
-      if (!property) {
-        setError('נכס לא נמצא');
-        return;
-      }
-
-      // Validate that we can process this property
-      if (!property.mspkod) {
-        setError('נכס זה לא קיים');
-        return;
-      }
-
-      // TODO: Add validation for additional property conditions
-      // e.g. checking if retro is already running for this property
-
-      onChange(value);
+      onSelect(value); // בשלב זה רק נעביר את הערך, בהמשך נוסיף ולידציה מול הדאטהבייס
+      setValue(''); // נאפס את השדה אחרי בחירה
     } catch (err) {
       setError('שגיאה בחיפוש נכס');
       console.error('Property search error:', err);
@@ -59,7 +38,7 @@ export const PropertySearch: React.FC<PropertySearchProps> = ({ value, onChange 
           className="flex-1 p-2 border rounded focus:ring-2 focus:ring-blue-500"
           placeholder="הזן קוד נכס..."
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => setValue(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
         />
         <button 
