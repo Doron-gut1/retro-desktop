@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calculator, Check } from 'lucide-react';
 import { PropertySearch } from './PropertySearch';
 import { DateRange } from './DateRange';
 import { ChargeTypes } from './ChargeTypes';
 import { SizesTable } from './SizesTable';
 import type { RetroSizeData } from '../../services/retro/types';
+import { retroClient } from '../../services/ipc/retroClient';
 
 export const RetroCalculator: React.FC = () => {
+  const [isConnected, setIsConnected] = useState(false);
   const [propertyId, setPropertyId] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -16,9 +18,55 @@ export const RetroCalculator: React.FC = () => {
     trf1: 0, trf2: 0, trf3: 0, trf4: 0, trf5: 0, trf6: 0, trf7: 0, trf8: 0
   });
 
+  useEffect(() => {
+    const connectToDb = async () => {
+      try {
+        // בנייה של מחרוזת החיבור מהמשתנים בקובץ .env
+        const connectionString = `Server=${process.env.DB_SERVER};Database=${process.env.DB_NAME};User Id=${process.env.DB_USER};Password=${process.env.DB_PASSWORD};Encrypt=true;TrustServerCertificate=true;`;
+        
+        const result = await retroClient.connectDb(connectionString);
+        setIsConnected(result.success);
+        
+        if (!result.success) {
+          console.error('Failed to connect to DB:', result.error);
+        }
+      } catch (error) {
+        console.error('Connection error:', error);
+        setIsConnected(false);
+      }
+    };
+
+    connectToDb();
+  }, []);
+
   const handlePropertySelect = async (id: string) => {
-    setPropertyId(id);
-    // TODO: Load property sizes from DB
+    try {
+      const property = await retroClient.getProperty(id);
+      if (property) {
+        setPropertyId(id);
+        setSizes({
+          gdl1: property.godel || 0,
+          gdl2: property.gdl2 || 0,
+          gdl3: property.gdl3 || 0,
+          gdl4: property.gdl4 || 0,
+          gdl5: property.gdl5 || 0,
+          gdl6: property.gdl6 || 0,
+          gdl7: property.gdl7 || 0,
+          gdl8: property.gdl8 || 0,
+          trf1: property.mas || 0,
+          trf2: property.mas2 || 0,
+          trf3: property.mas3 || 0,
+          trf4: property.mas4 || 0,
+          trf5: property.mas5 || 0,
+          trf6: property.mas6 || 0,
+          trf7: property.mas7 || 0,
+          trf8: property.mas8 || 0
+        });
+      }
+    } catch (error) {
+      console.error('Error loading property:', error);
+      // TODO: Add error notification
+    }
   };
 
   const handleSizeUpdate = (index: number, newSize: number) => {
@@ -36,12 +84,46 @@ export const RetroCalculator: React.FC = () => {
   };
 
   const handleCalculate = async () => {
-    // TODO: Implement calculation logic
+    if (!propertyId || !startDate || !endDate || selectedTypes.length === 0) {
+      // TODO: Show validation error
+      return;
+    }
+
+    try {
+      // First prepare the retro data
+      await retroClient.prepareRetroData({
+        hskod: propertyId,
+        mspkod: 0 // TODO: Get from property data
+      });
+
+      // Then multiply rows
+      await retroClient.multiplyTempArnmforatRows({
+        hskod: propertyId,
+        sugtsList: selectedTypes.join(','),
+        isYearlyCharge: false // TODO: Add logic for yearly charges
+      });
+
+      // TODO: Show results
+    } catch (error) {
+      console.error('Calculation error:', error);
+      // TODO: Show error notification
+    }
   };
 
   const handleApprove = async () => {
     // TODO: Implement approval logic
   };
+
+  if (!isConnected) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold mb-2">מתחבר למסד הנתונים...</h2>
+          <p className="text-gray-600">אנא המתן</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div dir="rtl" className="flex flex-col bg-gray-50 min-h-screen text-right">
