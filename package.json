@@ -26,7 +26,7 @@
     "@types/react-dom": "^18.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "lucide-react": "^0.263.1",
-    "odbc": "^2.4.8",
+    "mssql": "^10.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwindcss": "^3.0.0"
@@ -37,7 +37,7 @@
     "@electron-forge/maker-rpm": "^7.0.0",
     "@electron-forge/maker-squirrel": "^7.0.0",
     "@electron-forge/maker-zip": "^7.0.0",
-    "@types/odbc": "^2.0.4",
+    "@types/mssql": "^9.1.4",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.0.0",
