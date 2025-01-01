@@ -10,7 +10,7 @@ export const RetroCalculator: React.FC = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [selectedTypes, setSelectedTypes] = useState<number[]>([]);
-
+  
   return (
     <div dir="rtl" className="flex flex-col bg-gray-50 min-h-screen text-right">
       <div className="bg-blue-600 text-white p-4">
@@ -20,10 +20,12 @@ export const RetroCalculator: React.FC = () => {
       <div className="flex flex-col p-4 gap-4">
         <div className="bg-white rounded-lg shadow p-4">
           <div className="grid grid-cols-3 gap-6">
+            {/* Property Search Column */}
             <div className="space-y-4">
               <PropertySearch onPropertySelect={setPropertyId} />
             </div>
 
+            {/* Dates & Charge Types Column */}
             <div className="space-y-4">
               <DateRange
                 startDate={startDate}
@@ -37,6 +39,7 @@ export const RetroCalculator: React.FC = () => {
               />
             </div>
 
+            {/* Action Buttons Column */}
             <div className="flex flex-col justify-end gap-2">
               <button 
                 className="bg-blue-600 text-white p-3 rounded flex items-center justify-center gap-2 hover:bg-blue-700"
@@ -52,6 +55,9 @@ export const RetroCalculator: React.FC = () => {
               </button>
             </div>
           </div>
+
+          {/* Sizes Table */}
+          <SizesTable />
         </div>
       </div>
     </div>
