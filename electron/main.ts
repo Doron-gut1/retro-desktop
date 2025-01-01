@@ -11,11 +11,12 @@ function createWindow() {
     }
   });
 
-  mainWindow.loadURL('http://localhost:5173');
-
-  // פתיחת כלי המפתח בסביבת פיתוח
+  // Dev vs Prod loading
   if (process.env.NODE_ENV === 'development') {
+    mainWindow.loadURL('http://localhost:5173');
     mainWindow.webContents.openDevTools();
+  } else {
+    mainWindow.loadFile(path.join(__dirname, '../index.html'));
   }
 }
 
