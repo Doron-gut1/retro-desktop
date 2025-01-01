@@ -2,14 +2,14 @@
   "name": "retro-desktop",
   "version": "1.0.0",
   "description": "Desktop application for retroactive calculations",
-  "main": "dist/electron/main.js",
+  "main": "electron/main.js",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "build:electron": "tsc -p electron/tsconfig.json",
     "preview": "vite preview",
-    "start": "electron dist/electron/main.js",
-    "dev:electron": "concurrently \"npm run dev\" \"npm run build:electron -- --watch\" \"wait-on http://localhost:5173 && electron .\"",
+    "start": "electron .",
+    "dev:electron": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && electron .\"",
     "build:all": "npm run build && npm run build:electron",
     "start:prod": "electron ."
   },
