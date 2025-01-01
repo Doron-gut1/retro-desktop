@@ -8,7 +8,7 @@
     "dev": "vite --port 5173",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "dev:electron": "NODE_ENV=development concurrently \"npm run dev\" \"wait-on tcp:5173 && npm start\""
+    "dev:electron": "cross-env NODE_ENV=development concurrently \"npm run dev\" \"wait-on tcp:5173 && npm start\""
   },
   "repository": {
     "type": "git",
