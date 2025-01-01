@@ -1,37 +1,36 @@
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
-import * as isDev from 'electron-is-dev';
 
 function createWindow() {
-  // Create the browser window.
+  // יצירת חלון הדפדפן
   const mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: false,
+      // אפשר גישה ל-require
+      enableRemoteModule: true
     }
   });
 
-  // Load the index.html from a url in development
-  // or the local file in production.
-  const startURL = isDev 
-    ? 'http://localhost:5173' 
-    : `file://${path.join(__dirname, '../build/index.html')}`;
+  // טעינת הדף הראשי מהפיתוח או מהבילד
+  const startURL = process.env.NODE_ENV === 'development'
+    ? 'http://localhost:5173'
+    : `file://${path.join(__dirname, '../dist/index.html')}`;
 
   mainWindow.loadURL(startURL);
 
-  // Open the DevTools in development.
-  if (isDev) {
+  // פתיחת כלי המפתח במצב פיתוח
+  if (process.env.NODE_ENV === 'development') {
     mainWindow.webContents.openDevTools();
   }
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
+// כשאלקטרון מוכן, יצירת החלון
 app.whenReady().then(createWindow);
 
-// Quit when all windows are closed.
+// סגירת האפליקציה כשכל החלונות נסגרים
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
