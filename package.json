@@ -2,18 +2,15 @@
   "name": "retro-desktop",
   "version": "1.0.0",
   "description": "Desktop application for retroactive calculations",
-  "main": "dist/main.js",
+  "main": "electron/main.js",
   "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "dev": "concurrently \"npm run build:electron\" \"npm run start:electron\" \"npm run start:react\"",
-    "start:electron": "wait-on tcp:5173 && electron .",
-    "start:react": "vite",
+    "start": "vite",
+    "dev": "vite",
     "build": "tsc && vite build",
-    "build:electron": "tsc electron/main.ts --outDir dist",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "electron:start": "electron .",
+    "electron:build": "tsc -p electron/tsconfig.json",
+    "electron:dev": "concurrently \"npm run dev\" \"npm run electron:build\" \"wait-on http://localhost:5173 && npm run electron:start\""
   },
   "repository": {
     "type": "git",
@@ -30,27 +27,25 @@
     "mssql": "^10.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tailwindcss": "^3.0.0",
-    "wait-on": "^7.2.0"
+    "tailwindcss": "^3.0.0"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^7.0.0",
-    "@electron-forge/maker-deb": "^7.0.0",
-    "@electron-forge/maker-rpm": "^7.0.0",
-    "@electron-forge/maker-squirrel": "^7.0.0",
-    "@electron-forge/maker-zip": "^7.0.0",
+    "@types/electron": "^1.6.10",
     "@types/mssql": "^9.1.4",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.0.0",
     "autoprefixer": "^10.0.0",
     "concurrently": "^8.0.0",
+    "cross-env": "^7.0.3",
     "electron": "^28.0.0",
+    "electron-builder": "^24.0.0",
     "eslint": "^8.0.0",
     "eslint-plugin-react-hooks": "^4.0.0",
     "eslint-plugin-react-refresh": "^0.4.0",
     "postcss": "^8.0.0",
     "typescript": "^5.0.0",
-    "vite": "^5.0.0"
+    "vite": "^5.0.0",
+    "wait-on": "^7.2.0"
   }
 }
